@@ -11,6 +11,7 @@
 
 namespace App\Entity;
 
+use App\SimulateBundleInVendor\Entity\UserInterfaceInVendor;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -28,7 +29,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @author Ryan Weaver <weaverryan@gmail.com>
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */
-class User implements UserInterface, \Serializable
+class User implements UserInterface, \Serializable, UserInterfaceInVendor
 {
     /**
      * @var int
@@ -37,7 +38,7 @@ class User implements UserInterface, \Serializable
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private $userId;
 
     /**
      * @var string
@@ -78,9 +79,9 @@ class User implements UserInterface, \Serializable
      */
     private $roles = [];
 
-    public function getId(): ?int
+    public function getUserId(): ?int
     {
-        return $this->id;
+        return $this->userId;
     }
 
     public function setFullName(string $fullName): void
@@ -174,7 +175,7 @@ class User implements UserInterface, \Serializable
     public function serialize(): string
     {
         // add $this->salt too if you don't use Bcrypt or Argon2i
-        return serialize([$this->id, $this->username, $this->password]);
+        return serialize([$this->userId, $this->username, $this->password]);
     }
 
     /**
@@ -183,6 +184,6 @@ class User implements UserInterface, \Serializable
     public function unserialize($serialized): void
     {
         // add $this->salt too if you don't use Bcrypt or Argon2i
-        [$this->id, $this->username, $this->password] = unserialize($serialized, ['allowed_classes' => false]);
+        [$this->userId, $this->username, $this->password] = unserialize($serialized, ['allowed_classes' => false]);
     }
 }

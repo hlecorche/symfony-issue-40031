@@ -16,3 +16,11 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'App\Entity'
                 alias: App
+            SimulateBundleInVendor:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/SimulateBundleInVendor/Entity'
+                prefix: 'App\SimulateBundleInVendor\Entity'
+                alias: SimulateBundleInVendor
+        resolve_target_entities:
+            App\SimulateBundleInVendor\Entity\UserInterfaceInVendor: App\Entity\User
