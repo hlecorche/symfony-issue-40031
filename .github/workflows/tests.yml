@@ -1,0 +1,40 @@
+name: Tests
+
+on:
+    push:
+    pull_request:
+
+jobs:
+    tests:
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    -   symfony-version: '5.2.1'
+                    -   symfony-version: '5.2.2'
+
+        name: With SF ${{ matrix.symfony-version }}
+
+        runs-on: 'ubuntu-latest'
+
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v2
+
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: 7.4
+                    coverage: none
+                env:
+                    update: true
+
+            -   name: Install dependencies
+                run: composer update --no-interaction --no-progress
+
+            -   name: Force symfony/doctrine-bridge version
+                run: composer require "symfony/doctrine-bridge:${{ matrix.symfony-version }}"
+
+            -   name: Run PHPUnit
+                run: php vendor/phpunit/phpunit/phpunit
+                timeout-minutes: 2
